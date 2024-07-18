@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useFetch } from '../../hooks/useFetch'
 import Nav from '../../components/nav/Nav'
 import  Container  from '../../components/container/Container'
@@ -9,8 +9,8 @@ import { useSearchParams } from 'react-router-dom'
 
 const Products = () => {
   const [searchParam, setSearchParam] = useSearchParams()
-  const [selectValue, setSelectValue] = useState('all')
-  const [data, loading] = useFetch(`products/?sort=${selectValue}`)
+  const [selectValue, setSelectValue] = useState(searchParam.get('sort') || 'all')
+  const [data, loading] = useFetch(`products`)
   const sortedProducts = useMemo(() => {
     sortProducts(data, selectValue)
   },[selectValue])
@@ -27,7 +27,7 @@ const Products = () => {
       <Container>
          
           <Select
-          defaultValue={"all"}
+          defaultValue={selectValue}
           style={{
 
             width: 120,
@@ -75,13 +75,13 @@ const Products = () => {
 }
 
 const sortProducts  = (product, selectValue) => {
-  if(!selectValue){
+  if(selectValue === 'all'){
     return product
   }
   else if  (selectValue === 'cheap'){
     return product.sort((a, b) => a.price - b.price)
   }
-  else{
+  else if (selectValue === 'expensive'){
     return product.sort((a, b) => b.price - a.price)
   }
 }

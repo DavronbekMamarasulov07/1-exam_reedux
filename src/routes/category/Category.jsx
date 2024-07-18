@@ -31,7 +31,6 @@ const Category = () => {
       <Nav />
       <Container>
         <Select
-          placeholder="Select price"
           defaultValue={selectValue}
           style={{
 
